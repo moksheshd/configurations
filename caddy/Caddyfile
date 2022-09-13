@@ -1,0 +1,120 @@
+{
+	email infra@leucinetech.com
+}
+
+(redirect) {
+	@http {
+		protocol http
+	}
+	redir @http https://{host}{uri}
+}
+
+(security-headers) {
+	# remove certain headers
+	-Server
+	-X-Powered-By
+	-Liferay-Portal
+	-X-Turbo-Charged-By
+	-X-Server-Powered-By
+	-X-Powered-CMS
+	-X-Redirect-By
+	-X-Generator
+	-X-Generated-By
+	-X-CMS
+
+	# stops pages from loading when they detect reflected cross-site scripting
+	X-XSS-Protection "1; mode=block"
+
+	# instructs user agents to treat all of a site's insecure URLs (those served over HTTP) as though they have been replaced with secure URLs (those served over HTTPS).
+	#Content-Security-Policy "upgrade-insecure-requests"
+	#Content-Security-Policy "default-src 'none'; object-src 'none'; child-src 'self'; connect-src 'self'; font-src 'self'; frame-src 'self'; frame-ancestors 'none'; img-src 'self'; manifest-src 'self'; media-src 'self'; script-src 'self'; require-trusted-types-for 'script'; style-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;"
+	#Content-Security-Policy "default-src 'none'; object-src 'none'; child-src 'self'; connect-src 'self'; font-src 'self'; frame-src 'self'; frame-ancestors 'none'; img-src 'self'; manifest-src 'self'; media-src 'self'; script-src 'self'; require-trusted-types-for 'script'; style-src 'https://{host}'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;"
+	Content-Security-Policy "object-src 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"
+
+	# disable FLoC tracking
+	#Permissions-Policy interest-cohort=()
+
+	# enable HSTS
+	Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+	# disable browsers from sniffing the media type
+	X-Content-Type-Options "nosniff"
+
+	# clickjacking protection, do not allow displaying of the page in a frame.
+	X-Frame-Options "DENY"
+
+	# keep referrer data off of HTTP connections
+	#Referrer-Policy "strict-origin-when-cross-origin"
+	#Referrer-Policy "no-referrer-when-downgrade"    
+	Referrer-Policy "no-referrer"
+
+	# disable all the feature policy
+	#Permissions-Policy "accelerometer=(),autoplay=(),camera=(),display-capture=(),document-domain=(),encrypted-media=(),fullscreen=(),geolocation=(),gyroscope=(),magnetometer=(),microphone=(),midi=(),payment=(),picture-in-picture=(),publickey-credentials-get=(),screen-wake-lock=(),sync-xhr=(self),usb=(),web-share=(),xr-spatial-tracking=()"
+	Permissions-Policy "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(self), cross-origin-isolated=(), display-capture=(), document-domain=(), encrypted-media=(), execution-while-not-rendered=(), execution-while-out-of-viewport=(), fullscreen=(), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), navigation-override=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()"
+
+	X-Permitted-Cross-Domain-Policies "none"
+	Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"
+	#Cross-Origin-Embedder-Policy "require-corp"
+	#Cross-Origin-Opener-Policy "same-origin"
+	Cross-Origin-Resource-Policy "same-origin"
+}
+
+(headers) {
+	@static-assets {
+		path *.js *.js.map *.css *.css.map *.png *.jpeg *.jpg *.gif *.svg *.ico *.json *.txt *.ttf *.eot *.woff *.woff2
+	}
+
+	header @static-assets {
+		Cache-Control "public, max-age=15768000, stale-while-revalidate=86400"
+		import security-headers
+	}
+
+	header / {
+		Cache-Control "no-cache, no-store, must-revalidate"
+		import security-headers
+	}
+
+	header /index.html {
+		Cache-Control "no-cache, no-store, must-revalidate"
+		import security-headers
+	}
+
+	header /auth/login {
+		Cache-Control "no-cache, no-store, must-revalidate"
+		import security-headers
+	}
+
+	header /* {
+		Cache-Control "public, max-age=15, must-revalidate"
+		import security-headers
+	}
+}
+
+(common) {
+	encode gzip
+	log {
+		output file /var/log/caddy/access.log {
+			roll_size 10mb
+			roll_keep 5
+			roll_keep_for 720h
+		}
+		format console
+	}
+	import redirect
+}
+
+dev.platform.leucinetech.com {
+	root * /home/ubuntu/uat/dwi/frontend
+	try_files {path} /index.html
+	file_server
+
+	import common
+	import headers
+}
+
+api.dev.platform.leucinetech.com {
+	reverse_proxy localhost:8080 {
+	}
+	import common
+	import headers
+}
