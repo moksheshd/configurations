@@ -1,0 +1,51 @@
+# MySQL
+docker run \           
+--name mysql \      
+--publish 3306:3306 \
+--env MYSQL_ROOT_PASSWORD=root \
+--volume=/data/mysql:/var/lib/mysql \
+--detach \
+mysql:8.0
+
+# Postgres
+docker run \
+--name postgres \
+--publish 5432:5432 \
+--env POSTGRES_DB=postgres \
+--env POSTGRES_USER=postgres \
+--env POSTGRES_PASSWORD=postgres \
+--volume /data/postgres:/var/lib/postgresql/data \
+--detach \
+postgres:11-alpine
+
+# Mongo
+docker run \
+--name mongo \
+--publish 27017:27017 \
+--env MONGO_INITDB_ROOT_USERNAME=root \
+--env MONGO_INITDB_ROOT_PASSWORD=root \
+--volume=/data/mongo:/data/db \
+--detach \
+mongo:latest 
+
+# Mongo with Replica set
+
+
+# Caddy
+docker run \
+--name mongo \
+--publish 80:80 \
+--publish 443:443 \
+--volume=/data/caddy:/data \
+--volume=/config/caddy:/config \
+--detach \
+caddy:latest
+
+# Redis
+docker run \
+--name redis \
+--publish 6379:6379 \
+--volume=/data/redis:/data \
+--volume=/config/redis/redis.conf:/usr/local/etc/redis/redis.conf \
+--detach \
+redis:7-alpine
