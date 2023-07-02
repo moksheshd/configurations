@@ -26,10 +26,19 @@ docker run \
 --env MONGO_INITDB_ROOT_PASSWORD=root \
 --volume=/data/mongo:/data/db \
 --detach \
-mongo:latest 
+mongo:latest
 
-# Mongo with Replica set
-
+# Mongo with Single node replica set
+# Generate the keyfile.txt using "openssl rand -base64 768 > keyfile.tx"
+docker run \
+--name mongo \
+--publish 27017:27017 \
+--env MONGO_INITDB_ROOT_USERNAME=root \
+--env MONGO_INITDB_ROOT_PASSWORD=root \
+--volume=/home/moksh/Workspace/configurations/mongo/mongo-keyfile.txt:/data/keyfile.txt \
+--volume=/data/mongo:/data/db \
+--detach \
+mongo:latest mongod --replSet rs0 --bind_ip_all --keyFile /data/keyfile.txt
 
 # Caddy
 docker run \
