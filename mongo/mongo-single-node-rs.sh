@@ -2,6 +2,7 @@
 
 if [ ! -f "./mongo.keyfile" ]; then
     openssl rand -base64 741 > mongo.keyfile
+    chmod 400 mongo.keyfile
 fi
 
 DOCKER_COMPOSE_FILE="mongo-compose.yml"
