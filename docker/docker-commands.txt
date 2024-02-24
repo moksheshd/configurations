@@ -7,6 +7,15 @@ docker run \
 --detach \
 mysql:8.0
 
+# MariaDB
+docker run \           
+--name mariadb \      
+--publish 3306:3306 \
+--env MARIADB_ROOT_PASSWORD=root \
+--volume=/data/mariadb:/var/lib/mysql:Z \
+--detach \
+mariadb:10.6.12
+
 # Postgres
 docker run \
 --name postgres \
