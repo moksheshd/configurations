@@ -1,9 +1,14 @@
 #!/bin/bash
 
-if [ ! -f "./mongo.keyfile" ]; then
-    openssl rand -base64 741 > mongo.keyfile
-    chmod 400 mongo.keyfile
+sudo mkdir -p ~/data/mongo
+
+if [ ! -f "~/data/mongo/mongo.keyfile" ]; then
+    openssl rand -base64 741 > /tmp/mongo.keyfile
+    chmod 400 /tmp/mongo.keyfile
+    sudo mv /tmp/mongo.keyfile ~/data/mongo/mongo.keyfile
 fi
+
+sudo cp mongod.conf ~/data/mongo/mongod.conf
 
 DOCKER_COMPOSE_FILE="mongo-compose.yml"
 

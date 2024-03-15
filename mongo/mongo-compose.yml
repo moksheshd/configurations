@@ -4,9 +4,9 @@ services:
     image: mongo:5.0
     container_name: mongo
     volumes:
-      - /data/mongo:/data/db
-      - ./mongod.conf:/etc/mongod.conf.orig
-      - ./mongo.keyfile:/data/mongo.keyfile
+      - ~/data/mongo/data:/data/db
+      - ~/data/mongo/mongod.conf:/etc/mongod.conf.orig
+      - ~/data/mongo/mongo.keyfile:/data/mongo.keyfile
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
