@@ -3,7 +3,7 @@ docker run \
 --name mysql \      
 --publish 3306:3306 \
 --env MYSQL_ROOT_PASSWORD=root \
---volume=/data/mysql:/var/lib/mysql \
+--volume=~/data/mysql/data:/var/lib/mysql \
 --detach \
 mysql:8.0
 
@@ -12,7 +12,7 @@ docker run \
 --name mariadb \      
 --publish 3306:3306 \
 --env MARIADB_ROOT_PASSWORD=root \
---volume=/data/mariadb:/var/lib/mysql:Z \
+--volume=~/data/mariadb/data:/var/lib/mysql:Z \
 --detach \
 mariadb:10.6.12
 
@@ -23,7 +23,7 @@ docker run \
 --env POSTGRES_DB=postgres \
 --env POSTGRES_USER=postgres \
 --env POSTGRES_PASSWORD=postgres \
---volume /data/postgres:/var/lib/postgresql/data \
+--volume ~/data/postgres/data:/var/lib/postgresql/data \
 --detach \
 postgres:11-alpine
 
@@ -33,7 +33,7 @@ docker run \
 --publish 27017:27017 \
 --env MONGO_INITDB_ROOT_USERNAME=root \
 --env MONGO_INITDB_ROOT_PASSWORD=root \
---volume=/data/mongo:/data/db \
+--volume=~/data/mongo/data:/data/db \
 --detach \
 mongo:5.0
 
@@ -42,7 +42,7 @@ docker run \
 --name caddy \
 --publish 80:80 \
 --publish 443:443 \
---volume=/data/caddy:/data \
+--volume=~/data/caddy:/data \
 --volume=/config/caddy:/config \
 --detach \
 caddy:latest
@@ -51,7 +51,7 @@ caddy:latest
 docker run \
 --name redis \
 --publish 6379:6379 \
---volume=/data/redis:/data \
+--volume=~/data/redis/data:/data \
 --volume=/config/redis/redis.conf:/usr/local/etc/redis/redis.conf \
 --detach \
 redis:7-alpine
@@ -60,10 +60,10 @@ redis:7-alpine
 docker run \
 --name neo4j \
 --publish=7474:7474 --publish=7687:7687 \
---volume=/data/neo4j/data:/data \
---volume=/data/neo4j/logs:/logs \
---volume=/data/neo4j/import:/var/lib/neo4j/import \
---volume=/data/neo4j/plugins:/plugins \
+--volume=~/data/neo4j/data:/data \
+--volume=~/data/neo4j/logs:/logs \
+--volume=~/data/neo4j/import:/var/lib/neo4j/import \
+--volume=~/data/neo4j/plugins:/plugins \
 --env NEO4J_dbms_security_auth__minimum__password__length=4 \
 --env NEO4J_AUTH=neo4j/root \
 neo4j
