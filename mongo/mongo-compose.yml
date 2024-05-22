@@ -5,6 +5,7 @@ services:
     container_name: mongo
     volumes:
       - ~/data/mongo/data:/data/db
+      - /data/mongo/backups:/data/backups
       - ~/data/mongo/mongod.conf:/etc/mongod.conf.orig
       - ~/data/mongo/mongo.keyfile:/data/mongo.keyfile
     environment:
