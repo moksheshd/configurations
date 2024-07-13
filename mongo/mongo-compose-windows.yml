@@ -1,0 +1,32 @@
+services:
+  mongo:
+    image: mongo:5.0
+    container_name: mongo
+    volumes:
+      - D:\Users\moksh\AppData\Local\Docker\VolumeData\mongo\data:/data/db
+      - D:\Users\moksh\AppData\Local\Docker\VolumeData\mongo\backups:/data/backups
+      - D:\Users\moksh\AppData\Local\Docker\VolumeData\mongo\mongod.conf:/etc/mongod.conf
+      - D:\Users\moksh\AppData\Local\Docker\VolumeData\mongo\mongo.keyfile:/data/mongo.keyfile
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - 27017:27017
+    entrypoint:
+      - bash
+      - -c
+      - |
+          chmod 400 /data/mongo.keyfile
+          chown 999:999 /data/mongo.keyfile
+          exec docker-entrypoint.sh $$@
+    # command: ["--config", "/etc/mongod.conf"]
+    # command: ["--bind_ip_all", "--keyFile", "/data/mongo.keyfile",  "--replSet", "rs0"]
+    # command: ["--bind_ip_all", "--config", "/etc/mongod.conf.orig", "--keyFile", "/data/mongo.keyfile",  "--replSet", "rs0"]
+    # command: ["--bind_ip_all", "--config", "/etc/mongod.conf", "--keyFile", "/data/mongo.keyfile",  "--replSet", "rs0"]
+    command: ["--bind_ip_all", "--config", "/etc/mongod.conf"]
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
