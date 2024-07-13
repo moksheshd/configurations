@@ -67,3 +67,14 @@ docker run \
 --env NEO4J_dbms_security_auth__minimum__password__length=4 \
 --env NEO4J_AUTH=neo4j/root \
 neo4j
+
+# PGVector
+docker run \
+--name pgvector \
+--publish 5431:5432 \
+--env POSTGRES_DB=postgres \
+--env POSTGRES_USER=postgres \
+--env POSTGRES_PASSWORD=postgres \
+--volume ~/data/postgres/data:/var/lib/postgresql/data \
+--detach \
+pgvector/pgvector:pg16
