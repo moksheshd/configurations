@@ -1,0 +1,92 @@
+# MySQL
+docker run `
+--name mysql `
+--publish 3306:3306 `
+--env MYSQL_ROOT_PASSWORD=root `
+--volume E:\DOCKER-VOLUME\mysql\data:/var/lib/mysql `
+--detach `
+mysql:8.0
+
+# MariaDB
+docker run `
+--name mariadb `
+--publish 3306:3306 `
+--env MARIADB_ROOT_PASSWORD=root `
+--volume E:\DOCKER-VOLUME\mariadb\data:/var/lib/mysql:Z `
+--detach `
+mariadb:10.6.12
+
+# Postgres 11
+docker run `
+--name postgres `
+--publish 5432:5432 `
+--env POSTGRES_DB=postgres `
+--env POSTGRES_USER=postgres `
+--env POSTGRES_PASSWORD=postgres `
+--volume E:\DOCKER-VOLUME\postgres-11\data:/var/lib/postgresql/data `
+--detach `
+postgres:11-alpine
+
+# Postgres 16
+docker run `
+--name postgres-16 `
+--publish 5433:5432 `
+--env POSTGRES_DB=postgres `
+--env POSTGRES_USER=postgres `
+--env POSTGRES_PASSWORD=postgres `
+--volume E:\DOCKER-VOLUME\postgres-16\data:/var/lib/postgresql/data `
+--detach `
+postgres:16-alpine
+
+# Mongo
+docker run `
+--name mongo `
+--publish 27017:27017 `
+--env MONGO_INITDB_ROOT_USERNAME=root `
+--env MONGO_INITDB_ROOT_PASSWORD=root `
+--volume E:\DOCKER-VOLUME\mongo\data:/data/db `
+--detach `
+mongo:5.0
+
+# Caddy
+docker run `
+--name caddy `
+--publish 80:80 `
+--publish 443:443 `
+--volume E:\DOCKER-VOLUME\caddy:/data `
+--volume C:\config\caddy:/config `
+--detach `
+caddy:latest
+
+# Redis
+docker run `
+--name redis `
+--publish 6379:6379 `
+--volume E:\DOCKER-VOLUME\redis\data:/data `
+--volume C:\config\redis\redis.conf:/usr/local/etc/redis/redis.conf `
+--detach `
+redis:7-alpine
+
+# Neo4j
+docker run `
+--name neo4j `
+--publish=7474:7474 --publish=7687:7687 `
+--volume=E:\DOCKER-VOLUME\neo4j\data:/data `
+--volume=E:\DOCKER-VOLUME\neo4j\logs:/logs `
+--volume=E:\DOCKER-VOLUME\neo4j\import:/var/lib/neo4j/import `
+--volume=E:\DOCKER-VOLUME\neo4j\plugins:/plugins `
+--env NEO4J_dbms_security_auth__minimum__password__length=4 `
+--env NEO4J_AUTH=neo4j/root `
+--detach `
+neo4j
+
+# PGVector
+docker run `
+--name pgvector `
+--publish 5431:5432 `
+--env POSTGRES_DB=postgres `
+--env POSTGRES_USER=postgres `
+--env POSTGRES_PASSWORD=postgres `
+--volume E:\DOCKER-VOLUME\pgvector\data:/var/lib/postgresql/data `
+--detach `
+pgvector/pgvector:pg16
