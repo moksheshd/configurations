@@ -90,3 +90,23 @@ docker run `
 --volume E:\DOCKER-VOLUME\pgvector\data:/var/lib/postgresql/data `
 --detach `
 pgvector/pgvector:pg16
+
+# OpenHands Builder Application
+$env:WORKSPACE_BASE = "D:\Workspace\personal\builder"
+$env:SANDBOX_USER_ID = 1000
+
+docker run `
+  --name openhands-app-builder `
+  --pull=always `
+  --interactive `
+  --tty `
+  --env SANDBOX_RUNTIME_CONTAINER_IMAGE=docker.all-hands.dev/all-hands-ai/runtime:0.14-nikolaik `
+  --env LOG_ALL_EVENTS=true `
+  --env SANDBOX_USER_ID=$env:SANDBOX_USER_ID `
+  --env WORKSPACE_MOUNT_PATH=$env:WORKSPACE_BASE `
+  --volume /var/run/docker.sock:/var/run/docker.sock `
+  --volume ${env:WORKSPACE_BASE}:/opt/workspace_base `
+  --publish 3000:3000 `
+  --add-host host.docker.internal:host-gateway `
+  --detach `
+  docker.all-hands.dev/all-hands-ai/openhands:0.14
