@@ -18,7 +18,7 @@ mariadb:10.6.12
 
 # Postgres 11
 docker run `
---name postgres `
+--name postgres-11 `
 --publish 5432:5432 `
 --env POSTGRES_DB=postgres `
 --env POSTGRES_USER=postgres `
