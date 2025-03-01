@@ -30,7 +30,7 @@ postgres:11-alpine
 # Postgres 16
 docker run `
 --name postgres-16 `
---publish 5433:5432 `
+--publish 5432:5432 `
 --env POSTGRES_DB=postgres `
 --env POSTGRES_USER=postgres `
 --env POSTGRES_PASSWORD=postgres `
