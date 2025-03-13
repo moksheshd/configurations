@@ -38,6 +38,17 @@ docker run `
 --detach `
 postgres:16-alpine
 
+# Postgres 17
+docker run `
+--name postgres-17 `
+--publish 5432:5432 `
+--env POSTGRES_DB=postgres `
+--env POSTGRES_USER=postgres `
+--env POSTGRES_PASSWORD=postgres `
+--volume E:\DOCKER-VOLUME\postgres-17\data:/var/lib/postgresql/data `
+--detach `
+postgres:17-alpine
+
 # Mongo
 docker run `
 --name mongo `
