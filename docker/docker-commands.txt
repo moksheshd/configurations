@@ -129,7 +129,7 @@ docker run \
 --env "SPICEDB_DATASTORE_CONN_URI=postgres://root@host.docker.internal:26257/spicedb?sslmode=disable" \
 --restart always \
 --detach \
-authzed/spicedb serve
+authzed/spicedb serve --telemetry-endpoint=""
 
 # OpenHands Builder Application
 export WORKSPACE_BASE="$HOME/workspace/personal/builder"
