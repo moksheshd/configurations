@@ -110,6 +110,27 @@ docker run \
 --detach \
 cockroachdb/cockroach:latest start-single-node --insecure
 
+# SpiceDB Migrate
+docker run \
+--name spicedb-migrate \
+--env SPICEDB_DATASTORE_ENGINE=cockroachdb \
+--env "SPICEDB_DATASTORE_CONN_URI=postgres://root@host.docker.internal:26257/spicedb?sslmode=disable" \
+--restart on-failure \
+authzed/spicedb migrate head
+
+# SpiceDB
+docker run \
+--name spicedb \
+--publish 8080:8080 \
+--publish 9090:9090 \
+--publish 50051:50051 \
+--env SPICEDB_GRPC_PRESHARED_KEY=your_preshared_key_here \
+--env SPICEDB_DATASTORE_ENGINE=cockroachdb \
+--env "SPICEDB_DATASTORE_CONN_URI=postgres://root@host.docker.internal:26257/spicedb?sslmode=disable" \
+--restart always \
+--detach \
+authzed/spicedb serve
+
 # OpenHands Builder Application
 export WORKSPACE_BASE="$HOME/workspace/personal/builder"
 export SANDBOX_USER_ID=1000
