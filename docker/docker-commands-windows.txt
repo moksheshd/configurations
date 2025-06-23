@@ -102,6 +102,14 @@ docker run `
 --detach `
 pgvector/pgvector:pg16
 
+# CockroachDB
+docker run `
+--name cockroachdb `
+--publish 26257:26257 `
+--publish 8080:8080 `
+--detach `
+cockroachdb/cockroach:latest start-single-node --insecure
+
 # OpenHands Builder Application
 $env:WORKSPACE_BASE = "D:\Workspace\personal\builder"
 $env:SANDBOX_USER_ID = 1000
