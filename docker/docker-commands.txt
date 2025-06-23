@@ -16,16 +16,38 @@ docker run \
 --detach \
 mariadb:10.6.12
 
-# Postgres
+# Postgres 11
 docker run \
---name postgres \
+--name postgres-11 \
 --publish 5432:5432 \
 --env POSTGRES_DB=postgres \
 --env POSTGRES_USER=postgres \
 --env POSTGRES_PASSWORD=postgres \
---volume ~/data/postgres/data:/var/lib/postgresql/data \
+--volume ~/data/postgres-11/data:/var/lib/postgresql/data \
 --detach \
 postgres:11-alpine
+
+# Postgres 16
+docker run \
+--name postgres-16 \
+--publish 5432:5432 \
+--env POSTGRES_DB=postgres \
+--env POSTGRES_USER=postgres \
+--env POSTGRES_PASSWORD=postgres \
+--volume ~/data/postgres-16/data:/var/lib/postgresql/data \
+--detach \
+postgres:16-alpine
+
+# Postgres 17
+docker run \
+--name postgres-17 \
+--publish 5432:5432 \
+--env POSTGRES_DB=postgres \
+--env POSTGRES_USER=postgres \
+--env POSTGRES_PASSWORD=postgres \
+--volume ~/data/postgres-17/data:/var/lib/postgresql/data \
+--detach \
+postgres:17-alpine
 
 # Mongo
 docker run \
@@ -66,6 +88,7 @@ docker run \
 --volume=~/data/neo4j/plugins:/plugins \
 --env NEO4J_dbms_security_auth__minimum__password__length=4 \
 --env NEO4J_AUTH=neo4j/root \
+--detach \
 neo4j
 
 # PGVector
@@ -75,6 +98,34 @@ docker run \
 --env POSTGRES_DB=postgres \
 --env POSTGRES_USER=postgres \
 --env POSTGRES_PASSWORD=postgres \
---volume ~/data/postgres/data:/var/lib/postgresql/data \
+--volume ~/data/pgvector/data:/var/lib/postgresql/data \
 --detach \
 pgvector/pgvector:pg16
+
+# CockroachDB
+docker run \
+--name cockroachdb \
+--publish 26257:26257 \
+--publish 8080:8080 \
+--detach \
+cockroachdb/cockroach:latest start-single-node --insecure
+
+# OpenHands Builder Application
+export WORKSPACE_BASE="$HOME/workspace/personal/builder"
+export SANDBOX_USER_ID=1000
+
+docker run \
+  --name openhands-app-builder \
+  --pull=always \
+  --interactive \
+  --tty \
+  --env SANDBOX_RUNTIME_CONTAINER_IMAGE=docker.all-hands.dev/all-hands-ai/runtime:0.15-nikolaik \
+  --env LOG_ALL_EVENTS=true \
+  --env SANDBOX_USER_ID=$SANDBOX_USER_ID \
+  --env WORKSPACE_MOUNT_PATH=$WORKSPACE_BASE \
+  --volume /var/run/docker.sock:/var/run/docker.sock \
+  --volume $WORKSPACE_BASE:/opt/workspace_base \
+  --publish 3000:3000 \
+  --add-host host.docker.internal:host-gateway \
+  --detach \
+  docker.all-hands.dev/all-hands-ai/openhands:0.15
